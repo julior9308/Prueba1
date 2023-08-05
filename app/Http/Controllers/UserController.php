@@ -9,6 +9,7 @@ class UserController extends Controller
 {
     public function mayoresDe25()
     {
+
         $usuariosConImagenes = User::with('images')
             ->where('edad', '>', 25)
             ->get();
@@ -17,8 +18,8 @@ class UserController extends Controller
 
         foreach ($usuariosConImagenes as $usuario) {
             $usuarioData = [
-                'nombre' => $usuario->name, // Reemplaza con el campo correcto
-                'edad' => $usuario->edad,     // Reemplaza con el campo correcto
+                'nombre' => $usuario->name,
+                'edad' => $usuario->edad,
                 'imagenes' => [],
             ];
 
