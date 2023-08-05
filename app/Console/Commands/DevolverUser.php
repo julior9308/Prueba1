@@ -54,9 +54,12 @@ class DevolverUser extends Command
                 })->toArray();
 
                 $datos[] = [
+
                     'Nombre' => $user->name,
+                    'Datos del usuario'=>[
                     'Edad' => $user->edad,
                     'Imagenes' => $userImages,
+                    ],
                 ];
             }
 
