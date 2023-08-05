@@ -7,6 +7,44 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+    public function create(Request $request) //Ya Funciona
+    {
+        $data = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'edad' => 'required',
+
+
+        ]);
+
+        $user = User::create($data);
+
+        return response()->json(['message' => 'Usuario creado correctamente', 'user' => $user]);
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $data = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'edad' => 'required',
+
+        ]);
+
+        $user->update($data);
+
+        return response()->json(['message' => 'User actualizado correctamente', 'user' => $user]);
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return response()->json(['message' => 'User eliminado correctamente']);
+    }
+
     public function mayoresDe25()
     {
 
