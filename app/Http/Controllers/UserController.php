@@ -55,7 +55,7 @@ return new UserResource($user);
     public function mayoresDe25()
     {
 
-       $users=User::where('edad','>',35)->with('images')->get();
+       $users=User::where('edad','>',25)->with('images')->get();
 
         return new UserCollection($users);
     }
