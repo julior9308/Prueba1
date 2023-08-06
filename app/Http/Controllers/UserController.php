@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 
 class UserController extends Controller
 {
-    public function create(Request $request) //Ya Funciona
+    public function store(Request $request) //Ya Funciona
     {
         $data = $request->validate([
             'name' => 'required',
@@ -20,12 +22,12 @@ class UserController extends Controller
 
         $user = User::create($data);
 
-        return response()->json(['message' => 'Usuario creado correctamente', 'user' => $user]);
+        return new UserResource($user);
     }
 
     public function update(Request $request, User $user)
     {
-        $data = $request->validate([
+        $request->validate([
             'name' => 'required',
             'email' => 'required',
             'password' => 'required',
@@ -33,44 +35,28 @@ class UserController extends Controller
 
         ]);
 
-        $user->update($data);
-
-        return response()->json(['message' => 'User actualizado correctamente', 'user' => $user]);
+        $user->update($request->all());
+return new UserResource($user);
+      /*  return [
+            "status"=>1,
+            "data"=>$user,
+            "msg"=>"Usuario Actualizado"
+        ];*/
     }
+
 
     public function destroy(User $user)
     {
         $user->delete();
 
-        return response()->json(['message' => 'User eliminado correctamente']);
+        return new UserResource($user);
     }
 
     public function mayoresDe25()
     {
 
-        $usuariosConImagenes = User::with('images')
-            ->where('edad', '>', 25)
-            ->get();
+       $users=User::where('edad','>',35)->with('images')->get();
 
-        $result = [];
-
-        foreach ($usuariosConImagenes as $usuario) {
-            $usuarioData = [
-                'nombre' => $usuario->name,
-                'edad' => $usuario->edad,
-                'imagenes' => [],
-            ];
-
-            foreach ($usuario->images as $imagen) {
-                $usuarioData['imagenes'][] = [
-                    'url' => $imagen->url,
-                    'es visible' => $imagen->is_visible,
-                ];
-            }
-
-            $result[] = $usuarioData;
-        }
-
-        return response()->json($result, 200, [], JSON_PRETTY_PRINT);
+        return new UserCollection($users);
     }
 }
