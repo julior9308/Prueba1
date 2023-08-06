@@ -13,12 +13,12 @@ class UserController extends Controller
     {
         $data = $request->validate([
             'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-            'edad' => 'required',
+            'email' => 'required|unique:users,email',
 
+                'password' => 'required',
+                'edad' => 'required',
 
-        ]);
+            ]);
 
         $user = User::create($data);
 
@@ -29,14 +29,13 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required',
             'password' => 'required',
             'edad' => 'required',
 
         ]);
 
         $user->update($request->all());
-return new UserResource($user);
+        return new UserResource($user);
       /*  return [
             "status"=>1,
             "data"=>$user,
