@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -46,6 +47,8 @@ class UserController extends Controller
     public function store(RegistroRequest $request) //Ya Funciona
     {
 
+        //$rolAdmin=Role::all();
+        $rolAdmin=Role::where('name','=','admin')->get();
 
         $user = new User();
         $user->name=$request->name;
@@ -53,10 +56,13 @@ class UserController extends Controller
         $user->email=$request->email;
         $user->edad=$request->edad;
         $user->save();
+        $user->assignRole($rolAdmin);
+
 
        // $user = User::create($data);
 
         return new UserResource($user);
+       //return $rolAdmin;
     }
 
     public function update(Request $request, User $user)
