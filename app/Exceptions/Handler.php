@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -37,5 +38,17 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request,Throwable $exception)
+    {
+        if ($exception instanceof RouteNotFoundException)
+        {
+            return response()->json([
+                "res"=>false,
+                "msg"=>"No tienes permisospara acceder a esta ruta"
+            ],401);
+        }
+        return parent::render($request,$exception);
     }
 }
