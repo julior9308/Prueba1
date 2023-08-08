@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistroRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -48,15 +49,8 @@ class UserController extends Controller
     {
 
         //$rolAdmin=Role::all();
-        $rolAdmin=Role::where('name','=','admin')->get();
-
-        $user = new User();
-        $user->name=$request->name;
-        $user->password=bcrypt($request->password);
-        $user->email=$request->email;
-        $user->edad=$request->edad;
-        $user->save();
-        $user->assignRole($rolAdmin);
+        $datos=$request->only(['name','email','password','edad']);
+        $user=UserService::crearUser($datos);
 
 
        // $user = User::create($data);
